@@ -10,10 +10,15 @@ Vue.use(ElementUI);
 Vue.use(VueRouter)
 
 import index from './components/index.vue'
+import detail from './components/detail.vue'
 
 const routes= [
-  {path: '/index',component:index ,},
-  {path : '/' , redirect : '/index'} //访问'/'默认跳转首页
+  {path : '/' , redirect : '/index'}, //访问'/'默认跳转首页
+  {path: '/index',component:index },
+  {path: '/detail/:id',component:detail },
+
+  
+
 
 ]
 
