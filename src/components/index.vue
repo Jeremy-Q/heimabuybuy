@@ -7,6 +7,7 @@
         <a href="#/site/goodslist" class="router-link-exact-active router-link-active">购物商城</a>
       </div>
     </div>
+    <!-- hahah 测试 -->
     <div class="section">
       <div class="wrapper">
         <div class="wrap-box">
