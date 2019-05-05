@@ -13,12 +13,26 @@ import index from './components/index.vue'
 // 详情组件
 import detail from './components/detail.vue'
 
+import userContainer from './components/userContainer.vue'
+
+import userIndex from './components/userIndex.vue'
+import userDetail from './components/userDetail.vue'
+import userOrder from './components/userOrder.vue'
+
+
+
 const routes= [
   {path : '/' , redirect : '/index'}, //访问'/'默认跳转首页 重定向去首页
   {path: '/index',component:index },
   {path: '/detail/:id',component:detail },
-
-
+  {path: '/userContainer',component:userContainer,
+  children:[
+    {path: 'userDetail',component:userDetail },
+    {path: 'userIndex',component:userIndex },
+    {path: 'userOrder',component:userOrder }, 
+    {path: '',redirect:"userIndex" }
+  ]
+ },
 ]
 
 // 实例化路由对象

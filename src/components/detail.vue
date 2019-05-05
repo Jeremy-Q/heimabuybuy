@@ -15,7 +15,7 @@
             <div class="goods-box clearfix">
               <div class="pic-box">
                 <!-- 轮播图 -->
-                <el-carousel indicator-position="outside">
+                <el-carousel >
                   <el-carousel-item v-for="(item, index) in imglist" :key="index">
                     <img :src="item.thumb_path" alt>
                   </el-carousel-item>
@@ -47,35 +47,13 @@
                     <dt>购买数量</dt>
                     <dd>
                       <div class="stock-box">
-                        <div class="el-input-number el-input-number--small">
-                          <span role="button" class="el-input-number__decrease is-disabled">
-                            <i class="el-icon-minus"></i>
-                          </span>
-                          <span role="button" class="el-input-number__increase">
-                            <i class="el-icon-plus"></i>
-                          </span>
-                          <div class="el-input el-input--small">
-                            <!---->
-                            <input
-                              autocomplete="off"
-                              size="small"
-                              type="text"
-                              rows="2"
-                              max="60"
-                              min="1"
-                              validateevent="true"
-                              class="el-input__inner"
-                              role="spinbutton"
-                              aria-valuemax="60"
-                              aria-valuemin="1"
-                              aria-valuenow="1"
-                              aria-disabled="false"
-                            >
-                            <!---->
-                            <!---->
-                            <!---->
-                          </div>
-                        </div>
+                        <el-input-number
+                          size="small"
+                          v-model="num3"
+                          :min="1"
+                          :max="goodsinfo.stock_quantity"
+                          label="描述文字"
+                        ></el-input-number>
                       </div>
                       <span class="stock-txt">
                         库存
@@ -102,15 +80,24 @@
               >
                 <ul>
                   <li>
-                    <a href="javascript:;" class="selected">商品介绍</a>
+                    <a
+                      href="javascript:;"
+                     
+                      @click="showDesc=true"
+                      :class="{selected:showDesc}"
+                    >商品介绍</a>
                   </li>
                   <li>
-                    <a href="javascript:;">商品评论</a>
+                    <a
+                      href="javascript:;"
+                      @click="showDesc=false"
+                      :class="{selected:!showDesc}"
+                    >商品评论</a>
                   </li>
                 </ul>
               </div>
-              <div class="tab-content entry" style="display: block;" v-html="goodsinfo.content"></div>
-              <div class="tab-content" style="display: block;">
+              <div class="tab-content entry" v-show="showDesc" v-html="goodsinfo.content"></div>
+              <div class="tab-content" v-show="!showDesc">
                 <div class="comment-box">
                   <div id="commentForm" name="commentForm" class="form-box">
                     <div class="avatar-box">
@@ -124,6 +111,7 @@
                           sucmsg=" "
                           data-type="*10-1000"
                           nullmsg="请填写评论内容！"
+                          v-model.trim="message"
                         ></textarea>
                         <span class="Validform_checktip"></span>
                       </div>
@@ -134,6 +122,7 @@
                           type="submit"
                           value="提交评论"
                           class="submit"
+                          @click="submit"
                         >
                         <span class="Validform_checktip"></span>
                       </div>
@@ -143,43 +132,31 @@
                     <p
                       style="margin: 5px 0px 15px 69px; line-height: 42px; text-align: center; border: 1px solid rgb(247, 247, 247);"
                     >暂无评论，快来抢沙发吧！</p>
-                    <li>
+                    <li v-for="(item, index) in comments" :key="index">
                       <div class="avatar-box">
                         <i class="iconfont icon-user-full"></i>
                       </div>
                       <div class="inner-box">
                         <div class="info">
-                          <span>匿名用户</span>
-                          <span>2017/10/23 14:58:59</span>
+                          <span>{{item.user_name}}</span>
+                          <span>{{item.add_time}}</span>
                         </div>
-                        <p>testtesttest</p>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="avatar-box">
-                        <i class="iconfont icon-user-full"></i>
-                      </div>
-                      <div class="inner-box">
-                        <div class="info">
-                          <span>匿名用户</span>
-                          <span>2017/10/23 14:59:36</span>
-                        </div>
-                        <p>很清晰调动单很清晰调动单</p>
+                        <p>{{item.content}}</p>
                       </div>
                     </li>
                   </ul>
                   <div class="page-box" style="margin: 5px 0px 0px 62px;">
-                   
-                      <el-pagination
-                        @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
-                        :current-page="pageIndex"
-                        :page-sizes="[10, 20, 30, 40]"
-                        :page-size="pageSize"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :total="totalcount"
-                      ></el-pagination>
-                    
+                     <!-- 分页器 -->
+                    <el-pagination
+                      @size-change="handleSizeChange"
+                      @current-change="handleCurrentChange"
+                      :current-page="pageIndex"
+                      :page-sizes="[5, 10, 15, 20]"
+                      :page-size="pageSize"
+                      layout="total, sizes, prev, pager, next, jumper"
+                      :total="totalcount"
+                      background
+                    ></el-pagination>
                   </div>
                 </div>
               </div>
@@ -192,12 +169,15 @@
                 <ul class="side-img-list">
                   <li v-for="(item, index) in hotgoodslist" :key="index">
                     <div class="img-box">
-                      <a href="#/site/goodsinfo/90" class>
+                      <!-- <a href="#/site/goodsinfo/90" class> -->
+                      <router-link :to="'/detail/'+item.id">
                         <img :src="item.img_url">
-                      </a>
+                      </router-link>
+                      <!-- </a> -->
                     </div>
                     <div class="txt-box">
-                      <a href="#/site/goodsinfo/90" class>{{item.title}}</a>
+                      <!-- <a href="#/site/goodsinfo/90" class>{{item.title}}</a> -->
+                      <router-link :to="'/detail/'+item.id">{{item.title}}</router-link>
                       <span>{{item.add_time | formatTime}}</span>
                     </div>
                   </li>
@@ -220,41 +200,102 @@ export default {
     return {
       goodsinfo: {},
 
-      index: 1,
+      // index: 1,
       // 热卖商品
       hotgoodslist: [],
-      num1: 1,
+      // 默认购买数量
+      num3: 1,
       // 图片
       imglist: [],
+      // 是否显示描述
+      showDesc: true,
       // 输入的评论内容
-      comment: "",
+      comments: [],
       // 页码
       pageIndex: 1,
       // 页容量
       pageSize: 10,
       // 总条数
       totalcount: 0,
-      // 评论数组
-      commentList: []
+      // 评论 信息
+      message: ""
     };
   },
-
+  methods: {
+    // 获取评论的方法
+    getComments() {
+      this.$axios
+        .get(
+          `site/comment/getbypage/goods/${this.$route.params.id}?pageIndex=${
+            this.pageIndex
+          }&pageSize=${this.pageSize}`
+        )
+        .then(res => {
+          this.totalcount = res.data.totalcount;
+          this.comments = res.data.message;
+        });
+    },
+    // 也容量
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.getComments();
+    },
+    // 当前页码
+    handleCurrentChange(val) {
+      // 修改页码
+      this.pageIndex = val;
+      this.getComments();
+    },
+    // 提交评论
+    submit() {
+      if (this.message == 0) {
+        this.$message.warning("请添加内容");
+        return;
+      }
+      this.$axios
+        .post(`site/validate/comment/post/goods/${this.$route.params.id}`, {
+          commenttxt: this.message
+        })
+        .then(res => {
+          // console.log(res);
+          if (res.data.status === 0) {
+            this.$message.success(res.data.message);
+            // 清空内容
+            this.message = "";
+            // 重新获取评论数据
+            this.getComments();
+          }
+        });
+    }
+  },
 
   created() {
     console.log(this.$route.params.id);
     this.$axios
-      .get(
-        `/site/goods/getgoodsinfo/${
-          this.$route.params.id
-        }`
-      )
+      .get(`/site/goods/getgoodsinfo/${this.$route.params.id}`)
       .then(res => {
         // console.log(res);
         this.goodsinfo = res.data.message.goodsinfo;
         this.hotgoodslist = res.data.message.hotgoodslist;
         this.imglist = res.data.message.imglist;
       });
+    this.getComments();
   },
+
+  // 侦听器
+  watch: {
+    "$route.params.id"(nw, ov) {
+      // 获取商品详情
+      this.$axios.get(`/site/goods/getgoodsinfo/${nw}`).then(res => {
+        console.log(res);
+        this.goodsinfo = res.data.message.goodsinfo;
+        this.hotgoodslist = res.data.message.hotgoodslist;
+        this.imglist = res.data.message.imglist;
+      }),
+        // 获取评论
+        this.getComments();
+    }
+  }
 
   // // 过滤器
   // filters: {
@@ -265,34 +306,22 @@ export default {
   // },
 
   // 计数器
-  handleChange() {
-    console.log("hahah");
-  },
-
-// 也容量
-  handleSizeChange(){
-    console.log(size);
-    this.pageSize = sizi;
-    this.getComments()
-
-  },
-  // 页码
-  handleCurrentChange(){
-    console.log(Current);
-    this.pageIndex = Current ;
-    this.getComments()
-  }
-
-  
-}
+  // handleChange() {
+  //   console.log("hahah");
+  // },
+};
 </script>
 
 
 
 <style>
 .pic-box {
-  width: 395px;
+  width: 350px;
   height: 320px;
+}
+.tab-content img {
+  display: block;
+  width: 100%;
 }
 .pic-box .el-carousel {
   width: 100%;

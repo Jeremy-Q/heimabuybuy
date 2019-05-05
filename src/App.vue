@@ -17,8 +17,9 @@
                         <a href="" class="">注册</a>
                         <strong>|</strong>
                     </span>
-                    <span>
-                        <a href="" class="">会员中心</a>
+                    <span >
+                        <!-- <a  >会员中心</a> -->
+                        <router-link to="/userContainer">会员中心</router-link>
                         <strong>|</strong>
                         <a>退出</a>
                         <strong>|</strong>
