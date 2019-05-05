@@ -33,6 +33,21 @@ import'./assets/statics/site/css/style.css'
 
 Vue.config.productionTip = false
 
+// 设置axios到原型上 方便共享
+import axios from 'axios'
+Vue.prototype.$axios = axios;
+
+// 设置axios地址
+axios.defaults.baseURL = "http://111.230.232.110:8899";
+
+// 定义全局过滤器
+import moment from 'moment'
+Vue.filter('formatTime',(value)=>{
+  // "处理时间并返回"
+  return moment(value).format("YYYY-MM-DD");
+})
+
+
 
 
 // 挂载到vue实例上

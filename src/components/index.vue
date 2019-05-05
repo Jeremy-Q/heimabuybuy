@@ -182,9 +182,9 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 // 导入mement
-import moment from "moment";
+// import moment from "moment";
 export default {
   name: "index",
   data() {
@@ -197,8 +197,8 @@ export default {
   },
   // 数据获取
   created() {
-    axios
-      .get("http://111.230.232.110:8899/site/goods/gettopdata/goods")
+    this.$axios
+      .get("/site/goods/gettopdata/goods")
       .then(res => {
         console.log(res);
         this.catelist = res.data.message.catelist;
@@ -206,21 +206,21 @@ export default {
         this.toplist = res.data.message.toplist;
       });
     // 底部数据
-    axios
-      .get("http://111.230.232.110:8899/site/goods/getgoodsgroup")
+    this.$axios
+      .get("/site/goods/getgoodsgroup")
       .then(res => {
         console.log(res);
         this.sectionList = res.data.message;
       });
   },
 
-  // 过滤器
-  filters: {
-    formatTime(value) {
-      // 使用moment处理时间
-      return moment(value).format("YYYY年MM月DD日");
-    }
-  }
+  // // 过滤器
+  // filters: {
+  //   formatTime(value) {
+  //     // 使用moment处理时间
+  //     return moment(value).format("YYYY年MM月DD日");
+  //   }
+  // }
 };
 </script>
 

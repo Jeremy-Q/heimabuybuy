@@ -212,8 +212,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import moment from "moment";
+// import axios from "axios";
+// import moment from "moment";
 export default {
   name: "detail",
   data() {
@@ -242,9 +242,9 @@ export default {
 
   created() {
     console.log(this.$route.params.id);
-    axios
+    this.$axios
       .get(
-        `http://111.230.232.110:8899/site/goods/getgoodsinfo/${
+        `/site/goods/getgoodsinfo/${
           this.$route.params.id
         }`
       )
@@ -255,6 +255,15 @@ export default {
         this.imglist = res.data.message.imglist;
       });
   },
+
+  // // 过滤器
+  // filters: {
+  //   formatTime(value) {
+  //     // 使用moment处理时间
+  //     return moment(value).format("YYYY年MM月DD日");
+  //   }
+  // },
+
   // 计数器
   handleChange() {
     console.log("hahah");
