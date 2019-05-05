@@ -1,5 +1,5 @@
 <template>
- <div>
+  <div>
     <div class="section">
       <div class="location">
         <span>当前位置：</span>
@@ -13,7 +13,14 @@
         <div class="wrap-box">
           <div class="left-925">
             <div class="goods-box clearfix">
-              <div class="pic-box"></div>
+              <div class="pic-box">
+                <!-- 轮播图 -->
+                <el-carousel indicator-position="outside">
+                  <el-carousel-item v-for="(item, index) in imglist" :key="index">
+                    <img :src="item.thumb_path" alt>
+                  </el-carousel-item>
+                </el-carousel>
+              </div>
               <div class="goods-spec">
                 <h1>{{goodsinfo.title}}</h1>
                 <p class="subtitle">{{goodsinfo.sub_title}}</p>
@@ -102,8 +109,7 @@
                   </li>
                 </ul>
               </div>
-              <div class="tab-content entry" style="display: block;" v-html="goodsinfo.content">
-              </div>
+              <div class="tab-content entry" style="display: block;" v-html="goodsinfo.content"></div>
               <div class="tab-content" style="display: block;">
                 <div class="comment-box">
                   <div id="commentForm" name="commentForm" class="form-box">
@@ -163,11 +169,17 @@
                     </li>
                   </ul>
                   <div class="page-box" style="margin: 5px 0px 0px 62px;">
-                    <div id="pagination" class="digg">
-                      <span class="disabled">« 上一页</span>
-                      <span class="current">1</span>
-                      <span class="disabled">下一页 »</span>
-                    </div>
+                   
+                      <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="pageIndex"
+                        :page-sizes="[10, 20, 30, 40]"
+                        :page-size="pageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="totalcount"
+                      ></el-pagination>
+                    
                   </div>
                 </div>
               </div>
@@ -207,12 +219,27 @@ export default {
   data() {
     return {
       goodsinfo: {},
+
+      index: 1,
       // 热卖商品
       hotgoodslist: [],
+      num1: 1,
       // 图片
-      imglist: []
+      imglist: [],
+      // 输入的评论内容
+      comment: "",
+      // 页码
+      pageIndex: 1,
+      // 页容量
+      pageSize: 10,
+      // 总条数
+      totalcount: 0,
+      // 评论数组
+      commentList: []
     };
   },
+
+
   created() {
     console.log(this.$route.params.id);
     axios
@@ -228,21 +255,47 @@ export default {
         this.imglist = res.data.message.imglist;
       });
   },
-  // 过滤器
-  filters: {
-    formatTime(value) {
-      return moment(value).format("YYYY-MM-DD");
-      // return moment(value).format('YYYY年MM月DD日HH时mm分ss秒')
-    }
+  // 计数器
+  handleChange() {
+    console.log("hahah");
+  },
+
+// 也容量
+  handleSizeChange(){
+    console.log(size);
+    this.pageSize = sizi;
+    this.getComments()
+
+  },
+  // 页码
+  handleCurrentChange(){
+    console.log(Current);
+    this.pageIndex = Current ;
+    this.getComments()
   }
-};
+
+  
+}
 </script>
 
 
 
 <style>
-.tab-content img {
+.pic-box {
+  width: 395px;
+  height: 320px;
+}
+.pic-box .el-carousel {
+  width: 100%;
+  height: 100%;
+}
+.pic-box .el-carousel__container {
+  width: 100%;
+  height: 100%;
+}
+.pic-box .el-carousel__container img {
   display: block;
   width: 100%;
+  height: 100%;
 }
 </style>

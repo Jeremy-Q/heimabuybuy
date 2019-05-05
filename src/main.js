@@ -14,7 +14,7 @@ import index from './components/index.vue'
 import detail from './components/detail.vue'
 
 const routes= [
-  {path : '/' , redirect : '/index'}, //访问'/'默认跳转首页
+  {path : '/' , redirect : '/index'}, //访问'/'默认跳转首页 重定向去首页
   {path: '/index',component:index },
   {path: '/detail/:id',component:detail },
 
